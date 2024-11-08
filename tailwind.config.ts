@@ -60,6 +60,10 @@ const config: Config = {
         subtext: "#888888",
         stroke_btn: "#B7CFFF",
       },
+      backgroundImage: {
+        "nav-focus":
+          "linear-gradient(270deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.00) 100%)",
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",

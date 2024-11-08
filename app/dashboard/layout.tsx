@@ -8,7 +8,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <main className={`h-screen bg-[#F8F8F8] flex overflow-hidden`}>
-      <div className="w-[20%] h-full bg-black md:flex hidden overflow-y-auto scrollbar-hidden">
+      <div className="w-[25%] h-full bg-[#181818] md:flex hidden overflow-y-auto scrollbar-hidden">
         <LeftNav />
       </div>
 
