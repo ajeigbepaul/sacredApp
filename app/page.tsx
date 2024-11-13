@@ -1,101 +1,136 @@
+"use client";
+import Inputs from "@/components/Inputs";
 import Image from "next/image";
+import Link from "next/link";
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+const Welcome = () => {
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+  const handleImageLoad = () => {
+    setIsLoading(false); // Set loading to false when the image has loaded
+  };
 
-export default function Home() {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    router.push("/dashboard");
+  };
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <div className="w-full min-h-screen">
+      <div className="grid grid-cols-1 md:grid-cols-10">
+        {/* Left Column (Form Section) */}
+        <div className="w-full min-h-screen  px-6 md:px-10 lg:px-20 col-span-1 md:col-span-4 flex items-center justify-center bg-white  md:py-12 py-8">
+          <div className="w-full h-full max-w-sm lg:max-w-md flex flex-col space-y-8">
+            <div className="w-32 md:w-40">
+              <Image
+                src="/logo2.svg"
+                width={200}
+                height={100}
+                alt="logo"
+                className="object-contain self-start"
+              />
+            </div>
+            <div className="w-full flex flex-col space-y-8 pt-10">
+              {/* Welcome Heading */}
+              <h2 className="text-lg md:text-3xl font-sfprodb">
+                Welcome back! 👋
+              </h2>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+              {/* Google Sign-In Button */}
+              <button className="w-full p-2 md:p-4 border border-[#D8DEE6] rounded-lg flex items-center justify-center space-x-2">
+                <Image
+                  src="/google.svg"
+                  width={20}
+                  height={20}
+                  alt="Google icon"
+                  className="object-contain"
+                />
+                <span className="text-xs md:text-[16px] font-sfprodm">
+                  Sign in with Google
+                </span>
+              </button>
+
+              {/* Divider */}
+              <div className="w-full flex items-center space-x-2 justify-center">
+                <div className="w-1/5 h-px bg-gray-100" />
+                <span className="text-sm font-sfprodm">Or</span>
+                <div className="w-1/5 h-px bg-gray-100" />
+              </div>
+
+              {/* Sign-In Form */}
+              <form
+                onClick={handleSubmit}
+                className="w-full flex flex-col lg:space-y-32 space-y-12 mt-10"
+              >
+                <div className="w-full space-y-8 flex flex-col">
+                  <Inputs
+                    name="email"
+                    type="email"
+                    label="Email Address"
+                    placeholderText="Enter your email"
+                    value={email}
+                    handleChange={(e) => setEmail(e.target.value)}
+                    styleClass="p-2 md:p-4 placeholder:text-[16px] rounded-lg w-full bg-[#F8FAFF]"
+                  />
+                  <Inputs
+                    name="password"
+                    type="password"
+                    label="Password"
+                    placeholderText="Create a password"
+                    value={password}
+                    handleChange={(e) => setPassword(e.target.value)}
+                    styleClass="p-2 md:p-4 placeholder:text-[16px] rounded-lg w-full bg-[#F8FAFF]"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="w-full p-4 text-white bg-[#007C4D] rounded-lg flex items-center justify-center text-[16px]"
+                >
+                  Sign in
+                </button>
+              </form>
+
+              {/* Sign-Up Link */}
+              <div className="w-full flex space-x-2 items-center justify-center">
+                <h2 className="text-[16px] font-sfprodm text-[#1D1D1DCC]">
+                  {`Don’t have an account?`}
+                </h2>
+                <Link
+                  href="/account/register"
+                  className="text-[16px] font-sfprodm text-[#007C4D]"
+                >
+                  Sign up
+                </Link>
+              </div>
+            </div>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+        {/* Right Column (Image/Background Section) */}
+        <div className="w-full h-screen col-span-6 items-center justify-center">
+          {/* This could contain an image or other content for larger screens */}
+          {isLoading && (
+            <div className="w-full h-full flex items-center justify-center">
+              <div className="animate-pulse w-full h-full bg-gradient-to-r from-gray-300 to-gray-200 rounded-lg" />
+            </div>
+          )}
+          <div className="w-full h-full">
+            <Image
+              src="/welcomeback.svg"
+              width={1000}
+              height={1000}
+              alt="welcomeback"
+              className="object-contain"
+              onLoad={handleImageLoad}
+            />
+          </div>
+        </div>
+      </div>
     </div>
   );
-}
+};
+
+export default Welcome;
