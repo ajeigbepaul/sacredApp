@@ -2,7 +2,6 @@
 import Systems from "@/components/dashboard/Systems";
 import { setupArray, stepsArray } from "@/data/dashboard";
 import { cn } from "@/lib/utils";
-import Image from "next/image";
 import React, { useState } from "react";
 const Dashboard = () => {
   const [active, setActive] = useState(0);
