@@ -22,9 +22,10 @@ type TableRow = {
 // Define the props for the Table component
 interface TableProps {
   data: TableRow[];
+  blocked?: boolean;
 }
 
-const Table: React.FC<TableProps> = ({ data }) => {
+const Table: React.FC<TableProps> = ({ data, blocked }) => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [itemsPerPage] = useState<number>(8);
   const [filterText, setFilterText] = useState<string>("");
@@ -66,42 +67,87 @@ const Table: React.FC<TableProps> = ({ data }) => {
   return (
     <div className="w-full flex flex-col pb-10">
       <div className="mb-4 w-full flex items-center justify-between">
-        <div className="flex items-center space-x-1 w-fit p-2">
-          <Select
-            value={sortColumn}
-            onValueChange={(value) => setSortColumn(value as keyof TableRow)}
-          >
-            <SelectTrigger className="border border-[#D9D9D9] bg-white">
-              <SelectValue placeholder="Sort by" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="dateTime">Date and Time</SelectItem>
-              <SelectItem value="ipAddress">IP Address</SelectItem>
-              <SelectItem value="type">Type</SelectItem>
-              <SelectItem value="domain">Domain</SelectItem>
-            </SelectContent>
-          </Select>
-          <Select
-            value={sortDirection}
-            onValueChange={(value) =>
-              setSortDirection(value as "ascending" | "descending")
-            }
-          >
-            <SelectTrigger className="border border-[#D9D9D9] bg-white">
-              <SelectValue placeholder="Direction" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="ascending">Ascending</SelectItem>
-              <SelectItem value="descending">Descending</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-        <Input
-          placeholder="Filter table data..."
-          value={filterText}
-          onChange={handleFilterChange}
-          className="w-fit"
-        />
+        {blocked ? (
+          <>
+            <h1 className="w-fit text-xl text-[#181818] font-sfprodb">
+              Blocked Request list
+            </h1>
+            <div className="flex items-center space-x-1 w-fit p-2">
+              <Select
+                value={sortColumn}
+                onValueChange={(value) =>
+                  setSortColumn(value as keyof TableRow)
+                }
+              >
+                <SelectTrigger className="border border-[#D9D9D9] bg-white">
+                  <SelectValue placeholder="Sort by" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="dateTime">Date and Time</SelectItem>
+                  <SelectItem value="ipAddress">IP Address</SelectItem>
+                  <SelectItem value="type">Type</SelectItem>
+                  <SelectItem value="domain">Domain</SelectItem>
+                </SelectContent>
+              </Select>
+              <Select
+                value={sortDirection}
+                onValueChange={(value) =>
+                  setSortDirection(value as "ascending" | "descending")
+                }
+              >
+                <SelectTrigger className="border border-[#D9D9D9] bg-white">
+                  <SelectValue placeholder="Direction" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="ascending">Ascending</SelectItem>
+                  <SelectItem value="descending">Descending</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </>
+        ) : (
+          <>
+            {" "}
+            <div className="flex items-center space-x-1 w-fit p-2">
+              <Select
+                value={sortColumn}
+                onValueChange={(value) =>
+                  setSortColumn(value as keyof TableRow)
+                }
+              >
+                <SelectTrigger className="border border-[#D9D9D9] bg-white">
+                  <SelectValue placeholder="Sort by" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="dateTime">Date and Time</SelectItem>
+                  <SelectItem value="ipAddress">IP Address</SelectItem>
+                  <SelectItem value="type">Type</SelectItem>
+                  <SelectItem value="domain">Domain</SelectItem>
+                </SelectContent>
+              </Select>
+              <Select
+                value={sortDirection}
+                onValueChange={(value) =>
+                  setSortDirection(value as "ascending" | "descending")
+                }
+              >
+                <SelectTrigger className="border border-[#D9D9D9] bg-white">
+                  <SelectValue placeholder="Direction" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="ascending">Ascending</SelectItem>
+                  <SelectItem value="descending">Descending</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <Input
+              placeholder="Filter table data..."
+              value={filterText}
+              onChange={handleFilterChange}
+              className="w-fit"
+            />
+          </>
+        )}
       </div>
       <div className="w-full bg-white p-4 py-8 rounded-xl">
         <table className="min-w-full border border-gray-200 rounded-md overflow-hidden">

@@ -35,7 +35,7 @@ const Activity = () => {
   ];
   return (
     <div className="w-full h-full flex flex-col space-y-4">
-      <h1>Activity</h1>
+      <h1 className="text-[#181818] text-lg">Activity</h1>
       <div className="w-full grid grid-cols-4 gap-4">
         {activityA.map(({ title, count, percent, icon, bgcolor }, idx) => (
           <div
