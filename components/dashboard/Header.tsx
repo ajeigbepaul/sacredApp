@@ -1,6 +1,6 @@
 import Image from "next/image";
 import React from "react";
-import { FaSearch } from "react-icons/fa";
+// import { FaSearch } from "react-icons/fa";
 
 const Header = () => {
   return (
@@ -12,7 +12,7 @@ const Header = () => {
       <div className="w-fit flex items-center space-x-8">
         <Image src={"/bell.svg"} width={40} height={40} alt="bell" />
         <div className="w-fit flex items-center space-x-2 justify-center">
-          <Image src={"/avatar.svg"} width={40} height={40} alt="avatat" />
+          <Image src={"/avatar.svg"} width={40} height={40} alt="avatat" className="object-contain" />
           <div className="flex flex-col">
             <h2 className="text-sm font-semibold">Lucas Peter</h2>
             <span className="text-xs">Lucaspeter@gmail.com</span>

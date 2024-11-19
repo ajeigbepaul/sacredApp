@@ -58,11 +58,11 @@ const LeftNav = () => {
     <div className="w-full h-full">
       <div className="flex flex-col space-y-8 h-auto">
         <div className="w-full p-8">
-          <Image src={"/logo.svg"} alt="sacred-logo" width={150} height={100} />
+          <Image src={"/logo.svg"} alt="sacred-logo" width={125} height={100} className="object-contain" />
         </div>
         {/* Render Nav Links without Sublinks */}
         <div className="w-full flex flex-col space-y-3">
-          <h2 className="text-white px-8">MENU</h2>
+          <h2 className="text-white px-8 text-sm">MENU</h2>
           {navLinksWithoutSublinks.map((item, idx) => (
             <NavMenu key={idx} item={item} />
           ))}
@@ -72,7 +72,7 @@ const LeftNav = () => {
 
         {/* Render Nav Links with Sublinks */}
         <div className="w-full flex flex-col space-y-3 py-20">
-          <h2 className="text-white px-8">GENERAL</h2>
+          <h2 className="text-white px-8 text-sm">GENERAL</h2>
           {navLinksWithSublinks.map((item, idx) => (
             <NavMenu key={idx} item={item} />
           ))}

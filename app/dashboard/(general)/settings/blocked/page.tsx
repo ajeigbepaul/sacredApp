@@ -1,7 +1,15 @@
-import React from "react";
+import Table from '@/components/dashboard/Table'
+import { blockedData } from '@/data/dashboard'
+import React from 'react'
 
 const Blocked = () => {
-  return <div className="text-4xl text-yellow-300 underline">Blocked</div>;
-};
+  return (
+    <div className='w-full h-full'>
+      <div className="flex items-center justify-center">
+        <Table data={blockedData} blocked tabletitle='Blocked Pages/URLs'  />
+      </div>
+    </div>
+  )
+}
 
-export default Blocked;
+export default Blocked

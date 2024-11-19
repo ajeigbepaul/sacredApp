@@ -2,7 +2,7 @@
 import Inputs from "@/components/Inputs";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 const Welcome = () => {
   const router = useRouter();
@@ -12,6 +12,15 @@ const Welcome = () => {
   const handleImageLoad = () => {
     setIsLoading(false); // Set loading to false when the image has loaded
   };
+
+  // Debounced input change handler
+  const handleEmailChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+  }, []);
+
+  const handlePasswordChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+  }, []);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -62,7 +71,7 @@ const Welcome = () => {
 
               {/* Sign-In Form */}
               <form
-                onClick={handleSubmit}
+                onSubmit={handleSubmit}
                 className="w-full flex flex-col lg:space-y-32 space-y-12 mt-10"
               >
                 <div className="w-full space-y-8 flex flex-col">
@@ -72,7 +81,7 @@ const Welcome = () => {
                     label="Email Address"
                     placeholderText="Enter your email"
                     value={email}
-                    handleChange={(e) => setEmail(e.target.value)}
+                    handleChange={handleEmailChange}
                     styleClass="p-2 md:p-4 placeholder:text-[16px] rounded-lg w-full bg-[#F8FAFF]"
                   />
                   <Inputs
@@ -81,7 +90,7 @@ const Welcome = () => {
                     label="Password"
                     placeholderText="Create a password"
                     value={password}
-                    handleChange={(e) => setPassword(e.target.value)}
+                    handleChange={handlePasswordChange}
                     styleClass="p-2 md:p-4 placeholder:text-[16px] rounded-lg w-full bg-[#F8FAFF]"
                   />
                 </div>
@@ -125,6 +134,7 @@ const Welcome = () => {
               alt="welcomeback"
               className="object-contain"
               onLoad={handleImageLoad}
+              loading="lazy"
             />
           </div>
         </div>

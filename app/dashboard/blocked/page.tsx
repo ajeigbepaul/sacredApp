@@ -6,7 +6,7 @@ const Blocked = () => {
   return (
     <div className='w-full h-full'>
       <div className="flex items-center justify-center">
-        <Table data={blockedData} blocked  />
+        <Table data={blockedData} blocked tabletitle='Blocked Request list'  />
       </div>
     </div>
   )

@@ -105,7 +105,7 @@ const NavMenu = ({ item }: { item: NavItemProps }) => {
             height={24}
           />
           <h2
-            className={`pl-4 ${
+            className={`pl-4 text-[14px] ${
               isParentActive || isAnySubLinkActive
                 ? "text-white"
                 : "text-gray-400"
