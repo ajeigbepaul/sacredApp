@@ -19,15 +19,15 @@ const SignUp = () => {
         {/* Left Column (Form Section) */}
         <div className="w-full min-h-screen  px-6 md:px-10 lg:px-20 col-span-1 md:col-span-4 flex items-center justify-center  md:py-8 py-8">
           <div className="w-full h-full max-w-sm lg:max-w-md flex flex-col space-y-8">
-          <div className="w-32 md:w-40">
-                <Image
-                  src="/logo2.svg"
-                  width={200}
-                  height={100}
-                  alt="logo"
-                  className="object-contain self-start"
-                />
-              </div>
+            <div className="w-32 md:w-40">
+              <Image
+                src="/logo2.svg"
+                width={200}
+                height={100}
+                alt="logo"
+                className="object-contain self-start"
+              />
+            </div>
 
             <div className="w-full flex flex-col space-y-8 pt-10">
               {/* Welcome Heading */}
@@ -110,13 +110,13 @@ const SignUp = () => {
 
         {/* Right Column (Image/Background Section) */}
         <div className="w-full min-h-screen bg-blue-200 col-span-6 items-center justify-center">
-          {/* This could contain an image or other content for larger screens */}
-          {isLoading && (
-            <div className="w-full h-full flex items-center justify-center">
-              <div className="animate-pulse w-full h-full bg-gradient-to-r from-gray-300 to-gray-200 rounded-lg" />
-            </div>
-          )}
           <div className="w-full h-full">
+            {/* This could contain an image or other content for larger screens */}
+            {isLoading && (
+              <div className="w-full h-full flex items-center justify-center">
+                <div className="animate-pulse w-full h-full bg-gradient-to-r from-gray-300 to-gray-200 rounded-lg" />
+              </div>
+            )}
             <Image
               src="/welcomeback.svg"
               width={1000}

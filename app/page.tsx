@@ -14,13 +14,19 @@ const Welcome = () => {
   };
 
   // Debounced input change handler
-  const handleEmailChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-  }, []);
+  const handleEmailChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setEmail(e.target.value);
+    },
+    []
+  );
 
-  const handlePasswordChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-  }, []);
+  const handlePasswordChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setPassword(e.target.value);
+    },
+    []
+  );
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -121,12 +127,13 @@ const Welcome = () => {
         {/* Right Column (Image/Background Section) */}
         <div className="w-full h-screen col-span-6 items-center justify-center">
           {/* This could contain an image or other content for larger screens */}
-          {isLoading && (
-            <div className="w-full h-full flex items-center justify-center">
-              <div className="animate-pulse w-full h-full bg-gradient-to-r from-gray-300 to-gray-200 rounded-lg" />
-            </div>
-          )}
+
           <div className="w-full h-full">
+            {isLoading && (
+              <div className="w-full h-full flex items-center justify-center">
+                <div className="animate-pulse w-full h-full bg-gradient-to-r from-gray-300 to-gray-200 rounded-lg" />
+              </div>
+            )}
             <Image
               src="/welcomeback.svg"
               width={1000}
