@@ -13,25 +13,54 @@ export const setupArray = [
 export const stepsArray = [
   {
     step: "1",
-    title: "Access Your Dashboard ",
-    descr:
-      "After completing your sign-up process, log into your Sacred Eyes account. You will be directed to your user dashboard, which serves as the central hub for managing your account settings and configurations.",
-  },
-  {
-    step: "2",
-    title: "Generate Your Unique Code",
-    descr: `In your dashboard, locate and select the option labeled "Get Protection Code." This will allow you to generate a unique code that is specifically designed to enable filtering and protection on your server.`,
+    title: `Login to Your Router’s Administrative Panel
+ `,
+    descr: `First, access your router’s administrative panel. It’s generally located at the same IP
+address as your network gateway.
+Common addresses include:
+http://192.168.1.1
+http://192.168.254.254
+http://10.0.0.1
+If these don’t work, check the back of your router for the login URL.
+Your router’s administrative panel would be at http://192.168.100.1. If you don’t
+know the password, it is usually on the back of the router
+`,
   },
   {
     step: "3",
-    title: "Access Your Dashboard",
-    descr:
-      "After completing your sign-up process, log into your Sacred Eyes account. You will be directed to your user dashboard, which serves as the central hub for managing your account settings and configurations.",
+    title: "Configure Connection Settings",
+    descr: `Next, locate the network connection settings in your router’s admin panel. This may be
+under “WAN Settings,” “Connection Settings,” “Internet,” or similar. Look for options to
+change the “DNS Server” or “DNS Name Server.” It should allow you to change DNS1
+and DNS2 settings. Ignore options related to DynDNS (Dynamic DNS).
+Change the Primary DNS Address to 54.164.114.48 and the Secondary DNS to
+54.164.114.48.
+`,
+  },
+  {
+    step: "3",
+    title: "Save Your Changes",
+    descr: `After updating the DNS settings, click on “Apply” or “Save” to save your changes. It
+might take a few minutes for your computer to refresh the DHCP lease and get the new
+DNS settings. You can force this update by disabling and re-enabling your WiFi.
+To test the new settings, visit badexample.com. You should see a “domain not found”
+error if everything is configured correctly.
+By following these steps, you can ensure that your network is protected with
+SacredEyes DNS.
+`,
   },
   {
     step: "4",
-    title: "Generate Your Unique Code",
-    descr: `In your dashboard, locate and select the option labeled "Get Protection Code." This will allow you to generate a unique code that is specifically designed to enable filtering and protection on your server.`,
+    title: "Verify Configuration",
+    descr: `The final step is to verify the DNS configuration is working. You can use DNS Leak Test
+to help with this.
+You will run the Standard Test. The output should show SacredEyes in the response.
+It is advised to take the time to flush your DNS resolver cache on your local machine
+and browser caches to ensure that your new DNS configuration settings take affect.It
+can take 10 – 15 minutes for the change to take affect, be patient. The additional time is
+the time required for your computer DHCP Lease to get the new DNS. If you disable
+your Wifi and re-enable it, it will force it right away (you can also reboot the router).
+`,
   },
 ];
 
@@ -441,68 +470,68 @@ export const blockedData = [
   // Add more sample data as needed
 ];
 export const domainData = [
-    {
-      platform: { icon: "/platimage.svg", text: "WWW.youtube.com" },
-      status: "Not blocked by any categoty.",
-      action: { icon: "/allowed.svg", text: "Allowed" },     
-    },
-    {
-      platform: { icon: "/platimage.svg", text: "WWW.example.com" },
-      status: "Not blocked by any category.",
-      action: { icon: "/allowed.svg", text: "Allowed" },     
-    },
-    {
-      platform: { icon: "/platimage.svg", text: "WWW.sample.com" },
-      status: "Blocked by Adult & Pornography category.",
-      action: { icon: "/blockedd.svg", text: "Blocked" },     
-    },
-    {
-      platform: { icon: "/platimage.svg", text: "WWW.testsite.org" },
-      status: "Not blocked by any category.",
-      action: { icon: "/allowed.svg", text: "Allowed" },     
-    },
-    {
-      platform: { icon: "/platimage.svg", text: "WWW.malicious.com" },
-      status: "Blocked by Malicious category.",
-      action: { icon: "/blockedd.svg", text: "Blocked" },     
-    },
-    {
-      platform: { icon: "/platimage.svg", text: "WWW.anotherexample.net" },
-      status: "Not blocked by any category.",
-      action: { icon: "/allowed.svg", text: "Allowed" },     
-    },
-    {
-        platform: { icon: "/platimage.svg", text: "WWW.youtube.com" },
-        status: "Not blocked by any categoty.",
-        action: { icon: "/allowed.svg", text: "Allowed" },     
-      },
-      {
-        platform: { icon: "/platimage.svg", text: "WWW.example.com" },
-        status: "Not blocked by any category.",
-        action: { icon: "/allowed.svg", text: "Allowed" },     
-      },
-      {
-        platform: { icon: "/platimage.svg", text: "WWW.sample.com" },
-        status: "Blocked by Adult & Pornography category.",
-        action: { icon: "/blockedd.svg", text: "Blocked" },     
-      },
-      {
-        platform: { icon: "/platimage.svg", text: "WWW.testsite.org" },
-        status: "Not blocked by any category.",
-        action: { icon: "/allowed.svg", text: "Allowed" },     
-      },
-      {
-        platform: { icon: "/platimage.svg", text: "WWW.malicious.com" },
-        status: "Blocked by Malicious category.",
-        action: { icon: "/blockedd.svg", text: "Blocked" },     
-      },
-      {
-        platform: { icon: "/platimage.svg", text: "WWW.anotherexample.net" },
-        status: "Not blocked by any category.",
-        action: { icon: "/allowed.svg", text: "Allowed" },     
-      },
-    // Add more sample data as needed
-  ];
+  {
+    platform: { icon: "/platimage.svg", text: "WWW.youtube.com" },
+    status: "Not blocked by any categoty.",
+    action: { icon: "/allowed.svg", text: "Allowed" },
+  },
+  {
+    platform: { icon: "/platimage.svg", text: "WWW.example.com" },
+    status: "Not blocked by any category.",
+    action: { icon: "/allowed.svg", text: "Allowed" },
+  },
+  {
+    platform: { icon: "/platimage.svg", text: "WWW.sample.com" },
+    status: "Blocked by Adult & Pornography category.",
+    action: { icon: "/blockedd.svg", text: "Blocked" },
+  },
+  {
+    platform: { icon: "/platimage.svg", text: "WWW.testsite.org" },
+    status: "Not blocked by any category.",
+    action: { icon: "/allowed.svg", text: "Allowed" },
+  },
+  {
+    platform: { icon: "/platimage.svg", text: "WWW.malicious.com" },
+    status: "Blocked by Malicious category.",
+    action: { icon: "/blockedd.svg", text: "Blocked" },
+  },
+  {
+    platform: { icon: "/platimage.svg", text: "WWW.anotherexample.net" },
+    status: "Not blocked by any category.",
+    action: { icon: "/allowed.svg", text: "Allowed" },
+  },
+  {
+    platform: { icon: "/platimage.svg", text: "WWW.youtube.com" },
+    status: "Not blocked by any categoty.",
+    action: { icon: "/allowed.svg", text: "Allowed" },
+  },
+  {
+    platform: { icon: "/platimage.svg", text: "WWW.example.com" },
+    status: "Not blocked by any category.",
+    action: { icon: "/allowed.svg", text: "Allowed" },
+  },
+  {
+    platform: { icon: "/platimage.svg", text: "WWW.sample.com" },
+    status: "Blocked by Adult & Pornography category.",
+    action: { icon: "/blockedd.svg", text: "Blocked" },
+  },
+  {
+    platform: { icon: "/platimage.svg", text: "WWW.testsite.org" },
+    status: "Not blocked by any category.",
+    action: { icon: "/allowed.svg", text: "Allowed" },
+  },
+  {
+    platform: { icon: "/platimage.svg", text: "WWW.malicious.com" },
+    status: "Blocked by Malicious category.",
+    action: { icon: "/blockedd.svg", text: "Blocked" },
+  },
+  {
+    platform: { icon: "/platimage.svg", text: "WWW.anotherexample.net" },
+    status: "Not blocked by any category.",
+    action: { icon: "/allowed.svg", text: "Allowed" },
+  },
+  // Add more sample data as needed
+];
 export const cfArray = [
   {
     icon: "/porn.svg",

@@ -39,7 +39,7 @@ export const combinedNavLinks = [
       links: [
         { subT: "Categories and Filters", route: "/dashboard/settings/cf" },
         { subT: "Custom Domains", route: "/dashboard/settings/domain" },
-        { subT: "Blocked pages/URLs", route: "/dashboard/settings/blocked" },
+        // { subT: "Blocked pages/URLs", route: "/dashboard/settings/blocked" },
       ],
     },
     {
@@ -47,10 +47,10 @@ export const combinedNavLinks = [
       icon: "/users.svg",
       activeicon:"/users.svg",
       links: [
-        { subT: "Billing", route: "/dashboard/account/billing" },
+        // { subT: "Billing", route: "/dashboard/account/billing" },
         { subT: "User Profile", route: "/dashboard/account/profile" },
         { subT: "Security", route: "/dashboard/account/security" },
-        { subT: "Time Zone", route: "/dashboard/account/timezone" },
+        // { subT: "Time Zone", route: "/dashboard/account/timezone" },
       ],
     },
   ];

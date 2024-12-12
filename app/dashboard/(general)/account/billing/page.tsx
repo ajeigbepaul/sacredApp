@@ -3,7 +3,6 @@ import Image from "next/image";
 import React, { useState } from "react";
 import BillingCard from "./components/BillingCard";
 import { cn } from "@/lib/utils";
-import { FaDownload } from "react-icons/fa";
 
 const Billing = () => {
   const btnArray = ["View all", "Active", "completed"];

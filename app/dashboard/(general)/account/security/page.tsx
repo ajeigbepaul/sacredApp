@@ -13,7 +13,7 @@ const Security = () => {
           Change password and update password
         </h6>
       </div>
-      <div className="h-[70vh]">
+      <div className="h-[50vh]">
         <form>
           <div className="grid grid-cols-1 gap-4">
             <div>

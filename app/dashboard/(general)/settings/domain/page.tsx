@@ -37,7 +37,7 @@ const CustomDomain = () => {
             />
             <div>
               <h2 className="font-sfprodm text-lg text-[#181818]">
-                Custom Allowed domains
+                Top Blocked Domains
               </h2>
               <h2 className="text-sm font-sfprodm text-[#828890]">
                 Here you can allow a domain{" "}

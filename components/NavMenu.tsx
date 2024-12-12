@@ -1,47 +1,4 @@
-// import { cn } from "@/lib/utils";
-// import Image from "next/image";
-// interface itemProps {
-//   icon: string;
-//   title: string;
-//   route: string;
-// }
-// import { usePathname, useRouter } from "next/navigation";
-// const NavMenu = ({ item }: { item: itemProps }) => {
-//   const pathname = usePathname();
-//   const isActive = pathname === item.route;
-//   const router = useRouter();
-//   return (
-//     <div
-//       onClick={() => router.push(item.route)}
-//       className="flex flex-col items-start px-6 cursor-pointer relative"
-//     >
-//       {/* Left border with rounded corners */}
-//       {isActive && (
-//         <div className="absolute left-0 top-0 h-full w-2 bg-[#007C4D] rounded-tr-full rounded-br-full"></div>
-//       )}
-//       <div className="pl-4 w-full">
-//         <div
-//           className={cn("flex flex-col py-3 px-4 w-full", {
-//             "bg-[#2B2B2B]": isActive,
-//           })}
-//         >
-//           <div className="w-full flex space-x-2">
-//             <Image
-//               src={item.icon}
-//               alt="navicon"
-//               width={24}
-//               height={24}
-//               className={cn("", { "": isActive })}
-//             />
-//             <h2 className="text-white text-[14px]">{item?.title}</h2>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
 
-// export default NavMenu;
 
 import Image from "next/image";
 import React, { useState, useEffect } from "react";

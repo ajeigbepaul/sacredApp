@@ -5,14 +5,58 @@ import Link from "next/link";
 import React, { useState } from "react";
 
 const SignUp = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmpassword, setConfirmPassword] = useState("");
+  // Updated state to include new fields
+  const [formData, setFormData] = useState({
+    fullName: "",
+    email: "",
+    password: "",
+    phonenos: "",
+    confirmPassword: "",
+    country: "",
+    state: "",
+    userRole: "",
+  });
+
   const [isLoading, setIsLoading] = useState(true);
+
   const handleImageLoad = () => {
     setIsLoading(false); // Set loading to false when the image has loaded
   };
+  // Define user roles
+  const USER_ROLES = ["Household/Parent", "Organization", "University Admin"];
 
+  // Define a basic list of countries (you might want to expand this)
+  const COUNTRIES = [
+    "United States",
+    "Canada",
+    "United Kingdom",
+    "Australia",
+    // Add more countries as needed
+  ];
+  // Define a basic list of states for the US (you can expand or make dynamic)
+  const US_STATES = [
+    "Alabama",
+    "Alaska",
+    "Arizona",
+    "Arkansas",
+    "California",
+    "Colorado",
+    "Connecticut",
+    "Delaware",
+    "Florida",
+    "Georgia",
+    // Add more states
+  ];
+  // Generic handler for form input changes
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
   return (
     <div className="w-full min-h-screen">
       <div className="grid grid-cols-1 md:grid-cols-10">
@@ -57,36 +101,117 @@ const SignUp = () => {
               </div>
 
               {/* Sign-In Form */}
-              <form className="w-full flex flex-col lg:space-y-[72px] space-y-12 mt-0">
-                <div className="w-full space-y-4 flex flex-col">
+              <form className="w-full flex flex-col lg:space-y-[40px] space-y-12 mt-0">
+                <div className="w-full flex flex-col space-y-8">
+                  {/* New Full Name Input */}
+                  <Inputs
+                    name="fullName"
+                    type="text"
+                    label="Full Name"
+                    placeholderText="Enter your full name"
+                    value={formData.fullName}
+                    handleChange={handleInputChange}
+                    styleClass="p-2 md:p-2 placeholder:text-[16px] rounded-lg w-full bg-[#F8FAFF]"
+                  />
+
+                  {/* Email Input */}
                   <Inputs
                     name="email"
                     type="email"
                     label="Email Address"
                     placeholderText="Enter your email"
-                    value={email}
-                    handleChange={(e) => setEmail(e.target.value)}
-                    styleClass="p-2 md:p-4 placeholder:text-[16px] rounded-lg w-full bg-[#F8FAFF]"
-                  />
-                  <Inputs
-                    name="password"
-                    type="password"
-                    label="Password"
-                    placeholderText="Create a password"
-                    value={password}
-                    handleChange={(e) => setPassword(e.target.value)}
-                    styleClass="p-2 md:p-4 placeholder:text-[16px] rounded-lg w-full bg-[#F8FAFF]"
-                  />
-                  <Inputs
-                    name="confirmpassword"
-                    type="password"
-                    label="Confirm Password"
-                    placeholderText="Rewrite password"
-                    value={confirmpassword}
-                    handleChange={(e) => setConfirmPassword(e.target.value)}
-                    styleClass="p-2 md:p-4 placeholder:text-[16px] rounded-lg w-full bg-[#F8FAFF]"
+                    value={formData.email}
+                    handleChange={handleInputChange}
+                    styleClass="p-2 md:p-2 placeholder:text-[16px] rounded-lg w-full bg-[#F8FAFF]"
                   />
                 </div>
+                {/* Phone number */}
+                <Inputs
+                  name="phonenos"
+                  type="text"
+                  label="Phone number"
+                  placeholderText="Enter your Phone number"
+                  value={formData.phonenos}
+                  handleChange={handleInputChange}
+                  styleClass="p-2 md:p-2 placeholder:text-[16px] rounded-lg w-full bg-[#F8FAFF]"
+                />
+                {/* Country Dropdown */}
+                <div className="w-full">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Country
+                  </label>
+                  <select
+                    name="country"
+                    value={formData.country}
+                    onChange={handleInputChange}
+                    className="p-2 md:p-2 placeholder:text-[16px] rounded-lg w-full bg-[#F8FAFF]"
+                  >
+                    <option value="">Select Country</option>
+                    {COUNTRIES.map((country) => (
+                      <option key={country} value={country}>
+                        {country}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                {/* State Dropdown */}
+                <div className="w-full">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    State
+                  </label>
+                  <select
+                    name="state"
+                    value={formData.state}
+                    onChange={handleInputChange}
+                    className="p-2 md:p-2 placeholder:text-[16px] rounded-lg w-full bg-[#F8FAFF]"
+                  >
+                    <option value="">Select State</option>
+                    {US_STATES.map((state) => (
+                      <option key={state} value={state}>
+                        {state}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                {/* User Role Dropdown */}
+                <div className="w-full">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    User Role
+                  </label>
+                  <select
+                    name="userRole"
+                    value={formData.userRole}
+                    onChange={handleInputChange}
+                    className="p-2 md:p-2 placeholder:text-[16px] rounded-lg w-full bg-[#F8FAFF]"
+                  >
+                    <option value="">Select User Role</option>
+                    {USER_ROLES.map((role) => (
+                      <option key={role} value={role}>
+                        {role}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                {/* Password Inputs */}
+                <Inputs
+                  name="password"
+                  type="password"
+                  label="Password"
+                  placeholderText="Create a password"
+                  value={formData.password}
+                  handleChange={handleInputChange}
+                  styleClass="p-2 md:p-2 placeholder:text-[16px] rounded-lg w-full bg-[#F8FAFF]"
+                />
+                <Inputs
+                  name="confirmPassword"
+                  type="password"
+                  label="Confirm Password"
+                  placeholderText="Rewrite password"
+                  value={formData.confirmPassword}
+                  handleChange={handleInputChange}
+                  styleClass="p-2 md:p-2 placeholder:text-[16px] rounded-lg w-full bg-[#F8FAFF]"
+                />
+
                 <button className="w-full p-4 text-white bg-[#007C4D] rounded-lg flex items-center justify-center text-[16px]">
                   Sign up
                 </button>
@@ -109,7 +234,7 @@ const SignUp = () => {
         </div>
 
         {/* Right Column (Image/Background Section) */}
-        <div className="w-full min-h-screen bg-blue-200 col-span-6 items-center justify-center">
+        <div className="w-full min-h-screen col-span-6 items-center justify-center">
           <div className="w-full h-full">
             {/* This could contain an image or other content for larger screens */}
             {isLoading && (
