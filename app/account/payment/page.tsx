@@ -12,7 +12,7 @@ const Payment = () => {
   const handleImageLoad = () => {
     setIsLoading(false); // Set loading to false when the image has loaded
   };
-
+  console.log(expire)
   return (
     <div className="w-full min-h-screen">
       <div className="grid grid-cols-1 md:grid-cols-10">

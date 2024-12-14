@@ -15,7 +15,7 @@ const Dashboard = () => {
       <h1 className="text-[#181818] text-lg">Dashboard</h1>
       <div className="py-10 w-full flex flex-col space-y-4 px-4 bg-[#031E14] rounded-lg">
         <h2 className="text-white text-sm">
-          We're thrilled to have you onboard!👋
+         {` We're thrilled to have you onboard!`}👋
         </h2>
         <p className="text-[#828890] text-sm">{`You've taken the first step toward creating a safer and more controlled online experience. Whether you're protecting your family or enhancing workplace productivity, Sacred Eyes is here to give you the tools you need to manage and secure your digital world effortlessly.
       Start exploring your dashboard, customize your settings, and enjoy peace of mind knowing that your online environment is in safe hands.`}</p>

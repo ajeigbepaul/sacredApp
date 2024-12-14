@@ -163,11 +163,11 @@ const CustomDomain = () => {
           Predefined Platform Filters
         </h2>
         <h2 className="text-sm font-sfprodm text-[#828890]">
-          Easily block popular sites, including their main domain and all
+         {` Easily block popular sites, including their main domain and all
           associated domains required for the platform's functionality. For
           example, you can enable access to Social Networks in the main
           categories and filters but choose to block specific platforms like
-          Twitter.
+          Twitter.`}
         </h2>
         <div className="flex items-center justify-center">
           <DomainTable data={domainData} />
