@@ -243,7 +243,7 @@ const SignUp = () => {
               </div>
             )}
             <Image
-              src="/welcomeback.svg"
+              src="/welcomback.png"
               width={1000}
               height={1000}
               alt="welcomeback"

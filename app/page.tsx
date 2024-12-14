@@ -135,11 +135,11 @@ const Welcome = () => {
               </div>
             )}
             <Image
-              src="/welcomeback.svg"
+              src="/welcomback.png"
               width={1000}
               height={1000}
               alt="welcomeback"
-              className="object-contain"
+              className="object-cover"
               onLoad={handleImageLoad}
               loading="lazy"
             />
