@@ -19,13 +19,13 @@ const geistMono = localFont({
   weight: "100 900",
 });
 const sfProM = localFont({
-  src: "./fonts/SfProDisplayMedium.otf",
+  src: "./fonts/SF-Pro-Display-Medium.woff",
   variable: "--font-sfprom",
   weight: "500",
 });
 
 const sfProB = localFont({
-  src: "./fonts/SfProDisplayBold.otf",
+  src: "./fonts/SF-Pro-Display-Bold.woff",
   variable: "--font-sfprob",
   weight: "700",
 });
