@@ -4,16 +4,30 @@ interface inputProps {
   value: string;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   styleClass: string;
-  label?:string;
-  type:string;
-  placeholderText:string
-
+  label?: string;
+  type: string;
+  placeholderText: string;
+  disabled?: boolean;
+  // isValid?: boolean;
 }
-const Inputs = ({ name, placeholderText, type, label, value, handleChange, styleClass }:inputProps) => {
+const Inputs = ({
+  name,
+  placeholderText,
+  type,
+  label,
+  value,
+  handleChange,
+  styleClass,
+  disabled,
+  // isValid,
+}: inputProps) => {
   return (
     <div className="w-full flex flex-col space-y-2">
-      <label className="text-[16px] text-[#181818] font-sfprodm font-medium">{label}</label>
+      <label className="text-[16px] text-[#181818] font-sfprodm font-medium">
+        {label}
+      </label>
       <input
+        disabled={disabled}
         name={name}
         type={type}
         value={value}

@@ -1,8 +1,18 @@
-import { tableData } from "@/data/dashboard";
+"use client"
 import Image from "next/image";
 import React from "react";
 import Table from "@/components/dashboard/Table";
+import { useQuery } from "@tanstack/react-query";
+import { getActivities } from "@/services/api/activity";
 const Activity = () => {
+  const type = "allowed"; // Example type
+  const { data, isLoading } = useQuery({
+    queryKey: ["fetchActivities", type], // Unique key for caching
+    queryFn: () => getActivities(type),
+    enabled: !!type, // Ensures query only runs when type is available
+    staleTime: 5 * 60 * 1000, // Data remains fresh for 5 minutes
+  });
+  console.log(data?.data,"ALLOWED DATA")
   const activityA = [
     {
       title: "Traffic per hour",
@@ -63,7 +73,9 @@ const Activity = () => {
         ))}
       </div>
       <div className="flex items-center justify-center">
-        <Table data={tableData} />
+        
+          <Table loading={isLoading} data={data?.data} />
+        
       </div>
     </div>
   );

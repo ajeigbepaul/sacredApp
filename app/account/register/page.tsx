@@ -1,11 +1,57 @@
 "use client";
 import Inputs from "@/components/Inputs";
+import Spinner from "@/components/Spinner";
+import { Otp } from "@/services/api/auth";
+import { apiService } from "@/services/apiServices";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import React, { useState, useCallback } from "react";
+import { toast } from "sonner";
 
 const SignUp = () => {
-  // Updated state to include new fields
+  const router = useRouter();
+  const { data: d } = useQuery({
+    queryKey: ["getCountries"],
+    queryFn: () =>
+      apiService.getCountries({
+        headers: {
+          "x-crypto-key":
+            "7087128fd6540d3b4a56481c81084256b31a92dc2cee418ea6c41b9009496cd346460c94db406ac884336fd5f829c407a084f8ac4acd1b273290c1d4e7aeb9a9",
+          "x-sacredeyes": "Startup",
+        },
+      }),
+    refetchOnMount: true,
+    retry: 3,
+  });
+  const { data: roles } = useQuery({
+    queryKey: ["getRoles"],
+    queryFn: () =>
+      apiService.getRoles({
+        headers: {
+          "x-crypto-key":
+            "7087128fd6540d3b4a56481c81084256b31a92dc2cee418ea6c41b9009496cd346460c94db406ac884336fd5f829c407a084f8ac4acd1b273290c1d4e7aeb9a9",
+          "x-sacredeyes": "Startup",
+        },
+      }),
+    refetchOnMount: true,
+    retry: 3,
+  });
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: Otp,
+    onSuccess: () => {
+      // sessionStorage.setItem("otpData", JSON.stringify(data));
+      //send google analytics data
+      router.replace("/account/otp");
+    },
+    onError: (error: any) => {
+      toast.error(error.response?.data?.message || "An error occurred", {
+        position: "bottom-right",
+        dismissible: true,
+      });
+    },
+  });
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -16,47 +62,105 @@ const SignUp = () => {
     state: "",
     userRole: "",
   });
-
+  const [selC, setSelC] = useState(null);
+  const [states, setStates] = useState<string[]>([]); // State to hold the states based on selected country
   const [isLoading, setIsLoading] = useState(true);
-
   const handleImageLoad = () => {
     setIsLoading(false); // Set loading to false when the image has loaded
   };
-  // Define user roles
-  const USER_ROLES = ["Household/Parent", "Organization", "University Admin"];
-
-  // Define a basic list of countries (you might want to expand this)
-  const COUNTRIES = [
-    "United States",
-    "Canada",
-    "United Kingdom",
-    "Australia",
-    // Add more countries as needed
-  ];
-  // Define a basic list of states for the US (you can expand or make dynamic)
-  const US_STATES = [
-    "Alabama",
-    "Alaska",
-    "Arizona",
-    "Arkansas",
-    "California",
-    "Colorado",
-    "Connecticut",
-    "Delaware",
-    "Florida",
-    "Georgia",
-    // Add more states
-  ];
   // Generic handler for form input changes
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
+  const handleInputChange = useCallback(
+    async (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+      const { name, value } = e.target;
+      const selectedCountryId = value;
+
+      // Check if the changed field is the country
+      if (name === "country") {
+        const selectedCountry = d?.data?.find(
+          (country: any) => country._id === selectedCountryId
+        );
+        setSelC(selectedCountry?.name);
+      }
+      setFormData((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
+      // Fetch states if the country is selected
+      if (name === "country" && value) {
+        try {
+          const response = await apiService.getStates(value, {
+            headers: {
+              "x-crypto-key":
+                "7087128fd6540d3b4a56481c81084256b31a92dc2cee418ea6c41b9009496cd346460c94db406ac884336fd5f829c407a084f8ac4acd1b273290c1d4e7aeb9a9",
+              "x-sacredeyes": "Startup",
+            },
+          });
+          setStates(response?.data?.states); // Assuming response.data contains the states array
+        } catch (error) {
+          console.error("Error fetching states:", error);
+        }
+      }
+    },
+    [d] // Dependency array
+  );
+  
+  // const validateFormData = (data: any) => {
+  //   const {
+  //     full_name,
+  //     email,
+  //     phone_number,
+  //     password,
+  //     user_role,
+  //     country,
+  //     state,
+  //   } = data;
+  //   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Simple email regex
+  //   const phoneRegex = /^\d{10}$/; // Assuming phone number should be 10 digits
+
+  //   return (
+  //     full_name.trim() !== "" &&
+  //     user_role.trim() !== "" &&
+  //     country.trim() !== "" &&
+  //     state.trim() !== "" &&
+  //     emailRegex.test(email) &&
+  //     phoneRegex.test(phone_number) &&
+  //     password.length >= 6 && // Minimum password length
+  //     password === formData?.confirmPassword
+  //   );
+  // };
+
+  const handleNext = useCallback(
+    
+    async (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      const submitForm = {
+        full_name: formData?.fullName,
+        phone_number: formData?.phonenos,
+        country: selC,
+        state: formData?.state,
+        user_role: formData?.userRole,
+        email: formData?.email,
+        password: formData?.password,
+        address: "house 12, Ikorodu rd,Lagos.",
+      };
+      // const isValid = validateFormData(submitForm);
+      // if (!isValid) {
+      //   toast.error("Please fill in all required fields correctly.", {
+      //     position: "bottom-right",
+      //     dismissible: true,
+      //   });
+      //   return;
+      // }
+      // console.log("FormSubmitted", submitForm);
+      try {
+        sessionStorage.setItem("otpData", JSON.stringify(submitForm));
+        await mutateAsync(formData?.email);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    [formData, mutateAsync] // Dependency array
+  );
   return (
     <div className="w-full min-h-screen">
       <div className="grid grid-cols-1 md:grid-cols-10">
@@ -101,7 +205,10 @@ const SignUp = () => {
               </div>
 
               {/* Sign-In Form */}
-              <form className="w-full flex flex-col lg:space-y-[40px] space-y-12 mt-0">
+              <form
+                className="w-full flex flex-col lg:space-y-[40px] space-y-12 mt-0"
+                onSubmit={handleNext}
+              >
                 <div className="w-full flex flex-col space-y-8">
                   {/* New Full Name Input */}
                   <Inputs
@@ -147,9 +254,9 @@ const SignUp = () => {
                     className="p-2 md:p-2 placeholder:text-[16px] rounded-lg w-full bg-[#F8FAFF]"
                   >
                     <option value="">Select Country</option>
-                    {COUNTRIES.map((country) => (
-                      <option key={country} value={country}>
-                        {country}
+                    {d?.data?.map((country: any) => (
+                      <option key={country?._id} value={country?._id}>
+                        {country?.name}
                       </option>
                     ))}
                   </select>
@@ -166,9 +273,9 @@ const SignUp = () => {
                     className="p-2 md:p-2 placeholder:text-[16px] rounded-lg w-full bg-[#F8FAFF]"
                   >
                     <option value="">Select State</option>
-                    {US_STATES.map((state) => (
-                      <option key={state} value={state}>
-                        {state}
+                    {states?.map((state: any) => (
+                      <option key={state?._id} value={state?.name}>
+                        {state?.name}
                       </option>
                     ))}
                   </select>
@@ -185,9 +292,9 @@ const SignUp = () => {
                     className="p-2 md:p-2 placeholder:text-[16px] rounded-lg w-full bg-[#F8FAFF]"
                   >
                     <option value="">Select User Role</option>
-                    {USER_ROLES.map((role) => (
-                      <option key={role} value={role}>
-                        {role}
+                    {roles?.data?.map((role: any) => (
+                      <option key={role?._id} value={role?._id}>
+                        {role?.name}
                       </option>
                     ))}
                   </select>
@@ -212,8 +319,17 @@ const SignUp = () => {
                   styleClass="p-2 md:p-2 placeholder:text-[16px] rounded-lg w-full bg-[#F8FAFF]"
                 />
 
-                <button className="w-full p-4 text-white bg-[#007C4D] rounded-lg flex items-center justify-center text-[16px]">
-                  Sign up
+                <button
+                  type="submit"
+                  className="w-full p-4 text-white bg-[#007C4D] rounded-lg flex items-center justify-center text-[16px]"
+                >
+                  {isPending ? (
+                    <div className="w-full h-full flex items-center justify-center">
+                      <Spinner size="md" />
+                    </div>
+                  ) : (
+                    "Sign up"
+                  )}
                 </button>
               </form>
 

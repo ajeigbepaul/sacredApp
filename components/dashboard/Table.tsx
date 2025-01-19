@@ -12,10 +12,10 @@ import {
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa6";
 // Define the type for each row of data
 type TableRow = {
-  dateTime: string;
-  action: { icon: string; text: string };
-  ipAddress: string;
-  type: string;
+  createdAt: string;
+  action?: string;
+  deviceIp: string;
+  access_type: string;
   domain: string;
 };
 
@@ -24,9 +24,25 @@ interface TableProps {
   data: TableRow[];
   blocked?: boolean;
   tabletitle?: string;
+  loading?: boolean;
 }
+const formatDateTime = (isoString: string) => {
+  const date = new Date(isoString);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are zero-based
+  const day = String(date.getDate()).padStart(2, "0");
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
 
-const Table: React.FC<TableProps> = ({ data, blocked, tabletitle }) => {
+  return `${year}-${month}-${day} ${hours}:${minutes}`;
+};
+const Table: React.FC<TableProps> = ({
+  data,
+  blocked,
+  tabletitle,
+  loading,
+}) => {
+  console.log("TableData", data);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [itemsPerPage] = useState<number>(8);
   const [filterText, setFilterText] = useState<string>("");
@@ -36,19 +52,21 @@ const Table: React.FC<TableProps> = ({ data, blocked, tabletitle }) => {
   >("ascending");
 
   // Sorting functionality
-  const sortedData = [...data].sort((a, b) => {
-    if (sortColumn) {
-      if (a[sortColumn] < b[sortColumn])
-        return sortDirection === "ascending" ? -1 : 1;
-      if (a[sortColumn] > b[sortColumn])
-        return sortDirection === "ascending" ? 1 : -1;
-    }
-    return 0;
-  });
+  const sortedData = Array.isArray(data)
+    ? [...data].sort((a, b) => {
+        if (sortColumn) {
+          const aValue = a[sortColumn] ?? ""; // Handle undefined values
+          const bValue = b[sortColumn] ?? ""; // Handle undefined values
+          if (aValue < bValue) return sortDirection === "ascending" ? -1 : 1;
+          if (aValue > bValue) return sortDirection === "ascending" ? 1 : -1;
+        }
+        return 0;
+      })
+    : []; // Return an empty array if data is not iterable
   // Filtering functionality
-  const filteredData = sortedData.filter((row) =>
-    Object.values(row).some((value) =>
-      value.toString().toLowerCase().includes(filterText.toLowerCase())
+  const filteredData = sortedData?.filter((row) =>
+    Object?.values(row)?.some((value) =>
+      value?.toString()?.toLowerCase()?.includes(filterText.toLowerCase())
     )
   );
 
@@ -66,7 +84,7 @@ const Table: React.FC<TableProps> = ({ data, blocked, tabletitle }) => {
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
   const getDisplayedPages = () => {
     const pageRange = 3; // Pages to show around the current page
-    const pages = [];
+    const pages: (number | string)[] = [];
 
     if (totalPages <= 7) {
       // If there are fewer than 7 pages, show all
@@ -117,9 +135,9 @@ const Table: React.FC<TableProps> = ({ data, blocked, tabletitle }) => {
                   <SelectValue placeholder="Sort by" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="dateTime">Date and Time</SelectItem>
-                  <SelectItem value="ipAddress">IP Address</SelectItem>
-                  <SelectItem value="type">Type</SelectItem>
+                  <SelectItem value="createdAt">Date and Time</SelectItem>
+                  <SelectItem value="deviceIp">IP Address</SelectItem>
+                  <SelectItem value="access_type">Type</SelectItem>
                   <SelectItem value="domain">Domain</SelectItem>
                 </SelectContent>
               </Select>
@@ -184,60 +202,66 @@ const Table: React.FC<TableProps> = ({ data, blocked, tabletitle }) => {
         )}
       </div>
       <div className="w-full bg-white p-4 py-8 rounded-xl">
-        <table className="min-w-full border border-gray-200 rounded-md overflow-hidden">
-          <thead className="bg-white">
-            <tr>
-              <th className="p-4 text-xs font-sfprodm text-left cursor-pointer text-[#424242]">
-                Date and Time
-              </th>
-              <th className="p-4 text-xs font-sfprodm text-left text-[#424242]">
-                Action
-              </th>
-              <th className="p-4 text-left text-xs font-sfprodm text-[#424242] cursor-pointer">
-                IP Address
-              </th>
-              <th className="p-4 text-xs font-sfprodm text-[#424242] text-left cursor-pointer">
-                Type
-              </th>
-              <th className="p-4 text-xs font-sfprodm text-left cursor-pointer">
-                Domain
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {paginatedData.map((row, index) => (
-              <tr
-                key={index}
-                className="odd:bg-[#F8F8F8] even:bg-white text-[#4F4F4F] border-b"
-              >
-                <td className="p-4 text-[#4F4F4F] text-sm font-sfprodm">
-                  {row.dateTime}
-                </td>
-                <td className="p-4 flex items-center space-x-2">
-                  <Image
-                    src={row.action.icon}
-                    width={20}
-                    height={20}
-                    alt="checkicon"
-                    className="object-contain"
-                  />
-                  <span className="text-[#4F4F4F] text-sm font-sfprodm">
-                    {row.action.text}
-                  </span>
-                </td>
-                <td className="p-4 text-[#4F4F4F] text-sm font-sfprodm">
-                  {row.ipAddress}
-                </td>
-                <td className="p-4 text-[#4F4F4F] text-sm font-sfprodm">
-                  {row.type}
-                </td>
-                <td className="p-4 text-[#4F4F4F] text-sm font-sfprodm">
-                  {row.domain}
-                </td>
+        {loading ? (
+          <>{tableSkeleton()}</>
+        ) : (
+          <table className="min-w-full border border-gray-200 rounded-md overflow-hidden">
+            <thead className="bg-white">
+              <tr>
+                <th className="p-4 text-xs font-sfprodm text-left cursor-pointer text-[#424242]">
+                  Date and Time
+                </th>
+                <th className="p-4 text-xs font-sfprodm text-left text-[#424242]">
+                  Action
+                </th>
+                <th className="p-4 text-left text-xs font-sfprodm text-[#424242] cursor-pointer">
+                  IP Address
+                </th>
+                <th className="p-4 text-xs font-sfprodm text-[#424242] text-left cursor-pointer">
+                  Type
+                </th>
+                <th className="p-4 text-xs font-sfprodm text-left cursor-pointer">
+                  Domain
+                </th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {paginatedData.map((row, index) => (
+                <tr
+                  key={index}
+                  className="odd:bg-[#F8F8F8] even:bg-white text-[#4F4F4F] border-b"
+                >
+                  <td className="p-4 text-[#4F4F4F] text-sm font-sfprodm">
+                    {formatDateTime(row?.createdAt)}
+                  </td>
+                  <td className="p-4 flex items-center space-x-2">
+                    <Image
+                      src={`${blocked ? "/blockedd.svg" : "/allowed.svg"}`}
+                      width={20}
+                      height={20}
+                      alt="checkicon"
+                      className="object-contain"
+                    />
+                    <span className="text-[#4F4F4F] text-sm font-sfprodm">
+                      {/* {row.action.text} */}
+                      {blocked ? "Blocked" : "Allowed"}
+                    </span>
+                  </td>
+                  <td className="p-4 text-[#4F4F4F] text-sm font-sfprodm">
+                    {row?.deviceIp}
+                  </td>
+                  <td className="p-4 text-[#4F4F4F] text-sm font-sfprodm">
+                    {row.access_type}
+                  </td>
+                  <td className="p-4 text-[#4F4F4F] text-sm font-sfprodm">
+                    {row.domain}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+
         <div className="flex items-center justify-between mt-4">
           <button
             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
@@ -289,5 +313,56 @@ const Table: React.FC<TableProps> = ({ data, blocked, tabletitle }) => {
     </div>
   );
 };
-
+const tableSkeleton = () => {
+  return (
+    <table className="min-w-full border border-gray-200 rounded-md overflow-hidden">
+      <thead className="bg-white">
+        <tr>
+          <th className="p-4 text-xs font-sfprodm text-left cursor-pointer text-[#424242]">
+            Date and Time
+          </th>
+          <th className="p-4 text-xs font-sfprodm text-left text-[#424242]">
+            Action
+          </th>
+          <th className="p-4 text-left text-xs font-sfprodm text-[#424242] cursor-pointer">
+            IP Address
+          </th>
+          <th className="p-4 text-xs font-sfprodm text-[#424242] text-left cursor-pointer">
+            Type
+          </th>
+          <th className="p-4 text-xs font-sfprodm text-left cursor-pointer">
+            Domain
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {[...Array(5)].map((_, index) => (
+          <tr
+            key={index}
+            className="odd:bg-[#F8F8F8] even:bg-white text-[#4F4F4F] border-b"
+          >
+            <td className="p-4">
+              <div className="h-4 bg-gray-300 rounded animate-pulse w-3/4"></div>
+            </td>
+            <td className="p-4">
+              <div className="flex items-center space-x-2">
+                <div className="h-5 w-5 bg-gray-300 rounded-full animate-pulse"></div>
+                <div className="h-4 bg-gray-300 rounded animate-pulse w-1/2"></div>
+              </div>
+            </td>
+            <td className="p-4">
+              <div className="h-4 bg-gray-300 rounded animate-pulse w-1/2"></div>
+            </td>
+            <td className="p-4">
+              <div className="h-4 bg-gray-300 rounded animate-pulse w-1/3"></div>
+            </td>
+            <td className="p-4">
+              <div className="h-4 bg-gray-300 rounded animate-pulse w-3/4"></div>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+};
 export default Table;

@@ -28,7 +28,7 @@ const DomainTable: React.FC<TableProps> = ({ data }) => {
 
   const getDisplayedPages = () => {
     const pageRange = 3; // Pages to show around the current page
-    const pages = [];
+    const pages: (number | string)[] = [];
 
     if (totalPages <= 7) {
       // If there are fewer than 7 pages, show all
@@ -133,7 +133,7 @@ const DomainTable: React.FC<TableProps> = ({ data }) => {
                   onClick={() => setCurrentPage(page)}
                   className={`px-3 py-1  rounded-md text-sm ${
                     currentPage === page
-                     ? "bg-[#F9FAFB] text-[#2B3037]"
+                      ? "bg-[#F9FAFB] text-[#2B3037]"
                       : "text-[#828890] bg-transparent"
                   }`}
                 >

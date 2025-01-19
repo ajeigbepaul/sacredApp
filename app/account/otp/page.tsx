@@ -1,16 +1,57 @@
 "use client";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
+// Define an interface for the OTP data
+// interface OtpData {
+//   email?: string; 
+ 
 
+// }
 export default function Otp() {
+  const route = useRouter();
+  const [data, setData] = useState<any>({});
+  const retrievedData = sessionStorage.getItem("otpData");
+  useEffect(() => {
+    if (retrievedData) {
+      const otpData = JSON.parse(retrievedData);
+      setData(otpData); // Update state with otpData
+      // Use otpData as needed
+    }
+  }, [retrievedData]); // Only run when retrievedData changes
+  console.log(data);
   const [boxValues, setBoxValues] = React.useState("");
+  const [isDisabled, setIsDisabled] = React.useState(false);
+  console.log(isDisabled)
   const [countdown, setCountdown] = useState(120); // 2 minutes in seconds
   const otp = parseInt(boxValues, 10);
   const [isLoading, setIsLoading] = useState(true);
   const handleImageLoad = () => {
     setIsLoading(false); // Set loading to false when the image has loaded
   };
-  console.log("otp", otp);
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: verifyOtp,
+    onSuccess: async () => {
+      route.replace("/");
+    },
+    onError: (error: any) => {
+      toast.error(error.response?.data?.message || "An error occurred", {
+        position: "bottom-right",
+      });
+    },
+  });
+
+  const { mutateAsync: resendOtp, isPending: isResendingOtp } = useMutation({
+    mutationFn: OtpRecovery,
+    onSuccess: () => {
+      setCountdown(120); // Reset countdown after resend
+    },
+    onError: (error: any) => {
+      toast.error(error.response?.data?.message || "An error occurred", {
+        position: "bottom-right",
+        dismissible: true,
+      });
+    },
+  });
   useEffect(() => {
     if (!boxValues) return;
     if (boxValues.length === 4) {
@@ -20,7 +61,17 @@ export default function Otp() {
   }, [boxValues]);
   //handleNext
   const handleChange = (v: string) => setBoxValues(v);
-
+  const handleNext = useCallback(async () => {
+    setIsDisabled(true);
+    try {
+      await mutateAsync({
+        ...data,
+        otp: otp,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }, [otp, mutateAsync,data]);
   // Countdown timer effect
   useEffect(() => {
     if (countdown > 0) {
@@ -33,6 +84,14 @@ export default function Otp() {
     const minutes = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
+  };
+  const handleResendOTP = async () => {
+    if (!data?.email) return;
+    try {
+      await resendOtp(data.email);
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <div className="w-full md:min-h-screen h-auto">
@@ -91,8 +150,8 @@ export default function Otp() {
                           {`OTP expires in`}
                         </span>
                         <button
-                          //   disabled={isResendingOtp || countdown > 0} // Disable until countdown finishes
-                          //   onClick={handleResendOTP}
+                          onClick={handleResendOTP}
+                          disabled={isResendingOtp || countdown > 0} // Disable until countdown finishes
                           className={`text-opexa-blue font-bold underline bg-transparent border-none ${
                             countdown > 0 ? "opacity-50 cursor-not-allowed" : ""
                           }`}
@@ -107,8 +166,17 @@ export default function Otp() {
                 </div>
               </div>
               <div className="w-full mb-14">
-                <button className="w-full  p-4 text-white bg-[#007C4D] rounded-lg flex items-center justify-center text-[16px]">
-                  Proceed
+                <button
+                  className="w-full  p-4 text-white bg-[#007C4D] rounded-lg flex items-center justify-center text-[16px]"
+                  onClick={handleNext}
+                >
+                  {isPending ? (
+                    <div className="w-full h-full flex items-center justify-center">
+                      <Spinner size="md" />
+                    </div>
+                  ) : (
+                    "Proceed"
+                  )}
                 </button>
               </div>
             </div>
@@ -125,7 +193,7 @@ export default function Otp() {
           )}
           <div className="w-full h-full">
             <Image
-              src="/welcomeback.svg"
+              src="/welcomback.png"
               width={1000}
               height={1000}
               alt="welcomeback"
@@ -143,6 +211,11 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { OtpRecovery, verifyOtp } from "@/services/api/auth";
+import Spinner from "@/components/Spinner";
 
 function InputOTPControlled({
   onOtpChange,

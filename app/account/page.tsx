@@ -1,16 +1,13 @@
 import React from 'react'
 
 
-const Welcome = () => {
+const Logout = () => {
   return (
     <div className="w-full h-screen">
-      <div className="grid grid-cols-2">
-        <div className="w-full h-full bg-red-200">hello</div>
-        <div className="w-full h-full bg-blue-200">hi</div>
-      </div>
+      <h1>Logout page.</h1>
     </div>
   );
 };
 
-export default Welcome;
+export default Logout;
 
