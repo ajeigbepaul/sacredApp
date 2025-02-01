@@ -1,7 +1,7 @@
 "use client";
-import DomainTable from "@/components/dashboard/DomainTable";
+// import DomainTable from "@/components/dashboard/DomainTable";
 import Spinner from "@/components/Spinner";
-import { domainData } from "@/data/dashboard";
+// import { domainData } from "@/data/dashboard";
 import addToBlackList, {
   deleteDomain,
   getAllDomains,
