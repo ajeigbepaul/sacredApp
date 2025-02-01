@@ -45,9 +45,8 @@ const CustomDomain = () => {
   const handleAddToBlackList = async () => {
     try {
       await mutateAsync({ domain: blocked });
-     
     } catch (error) {
-      toast.error("There is an error somewhere" || error);
+      console.log(error);
     }
   };
   const handleDeleteDomain = async (id: string) => {
@@ -64,7 +63,6 @@ const CustomDomain = () => {
   const handleDelete = async () => {
     if (selectedDomain) {
       await handleDeleteDomain(selectedDomain); // Delete the selected domain
-      
     }
   };
   return (
@@ -184,7 +182,7 @@ const CustomDomain = () => {
           </div>
           <div className="grid grid-cols-2 gap-4">
             {data?.data.length > 0
-              ? data?.data?.map((domain:any) => (
+              ? data?.data?.map((domain: any) => (
                   <label
                     key={domain?._id}
                     className="flex items-center space-x-2"
