@@ -1,10 +1,47 @@
 "use client";
+import Spinner from "@/components/Spinner";
+import resetPassword from "@/services/api/security";
+import { useMutation } from "@tanstack/react-query";
+import { signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { toast } from "sonner";
 
 const Security = () => {
+  const router = useRouter();
   const [currentpassword, setCurrentPassword] = useState("");
   const [newpassword, setNewPassword] = useState("");
   const [repeatpassword, setRepeatPassword] = useState("");
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: resetPassword,
+    onSuccess: async () => {
+      toast.success("Your password has been reset successfully", {
+        position: "bottom-right",
+        dismissible: true,
+      });
+      await signOut({ redirect: false });
+      router.push("/");
+    },
+    onError: (error: any) => {
+      toast.error(error.response?.data?.message || "An error occurred", {
+        position: "bottom-right",
+        dismissible: true,
+      });
+    },
+  });
+  const handleReset = async () => {
+    console.log({ currentpassword, newpassword });
+    try {
+      if (newpassword !== repeatpassword)
+        throw new Error("Passwords do not match");
+      await mutateAsync({
+        current_password: currentpassword,
+        new_password: newpassword,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className="w-full h-screen flex flex-col space-y-4 bg-white rounded-lg p-4">
       <div className="flex flex-col space-y-1">
@@ -67,9 +104,16 @@ const Security = () => {
         </form>
       </div>
       <button
+        onClick={handleReset}
         className={`px-4 w-full rounded-lg p-2 text-xs font-sfprodm bg-[#007C4D] text-white`}
       >
-        Update password
+        {isPending ? (
+          <div className="w-full h-full flex items-center justify-center">
+            <Spinner size="md" />
+          </div>
+        ) : (
+          "Update Passoword"
+        )}
       </button>
     </div>
   );

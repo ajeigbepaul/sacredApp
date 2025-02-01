@@ -17,7 +17,7 @@ const Header = () => {
     refetchOnMount: true,
     retry: 3,
   });
-
+  console.log(user, "User Active");
   const handleLogout = async () => {
     try {
       await signOut({ redirect: false });

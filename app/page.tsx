@@ -2,7 +2,7 @@
 import Inputs from "@/components/Inputs";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Spinner from "@/components/Spinner";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
@@ -92,14 +92,16 @@ const Welcome = () => {
   };
 
   // Ensure all hooks are called before any returns
-  if (session) {
-    router.push("/dashboard");
-    return null; // Prevent rendering anything else
-  }
+  useEffect(() => {
+    if (session) {
+      router.push("/dashboard");
+    }
+  }, [session, router]);
 
   return (
     <div className="w-full min-h-screen">
-      {isLoading && <div>Loading...</div>} {/* Show loading state */}
+      {/* {isLoading && <div>Loading...</div>}  */}
+      {/* Show loading state */}
       <div className="grid grid-cols-1 md:grid-cols-10">
         {/* Left Column (Form Section) */}
         <div className="w-full min-h-screen  px-6 md:px-10 lg:px-20 col-span-1 md:col-span-4 flex items-center justify-center bg-white  md:py-12 py-8">
@@ -219,11 +221,11 @@ const Welcome = () => {
         <div className="w-full h-screen col-span-6 items-center justify-center">
           {/* This could contain an image or other content for larger screens */}
           <div className="w-full h-full">
-            {isLoading ? (
+            {/* {isLoading ? (
               <div className="w-full h-full flex items-center justify-center">
                 <div className="animate-pulse w-full h-full bg-gradient-to-r from-gray-200 to-gray-100 rounded-lg" />
               </div>
-            ) : (
+            ) : ( */}
               <Image
                 src="/welcomback.png"
                 width={1000}
@@ -232,7 +234,7 @@ const Welcome = () => {
                 className="object-cover"
                 loading="lazy"
               />
-            )}
+            {/* )} */}
           </div>
         </div>
       </div>
