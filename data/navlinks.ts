@@ -29,29 +29,44 @@ export const sublinks = [
   },
 ];
 export const combinedNavLinks = [
-    { title: "Configuration", icon: "/activity.svg", activeicon:"/activeactivity.svg", route: "/dashboard" },
-    { title: "Dashboard", icon: "/dashboard.svg", activeicon:"/activedashboard.svg", route: "/dashboard/activity" },
-    { title: "Blocked Request list", icon: "/blocked.svg", activeicon:"/activeblocked.svg", route: "/dashboard/blocked" },
-    {
-      title: "Settings",
-      icon: "/settings.svg",
-      activeicon:"/activesettings.svg",
-      links: [
-        { subT: "Categories and Filters", route: "/dashboard/settings/cf" },
-        { subT: "Custom Domains", route: "/dashboard/settings/domain" },
-        // { subT: "Blocked pages/URLs", route: "/dashboard/settings/blocked" },
-      ],
-    },
-    {
-      title: "Account",
-      icon: "/users.svg",
-      activeicon:"/users.svg",
-      links: [
-        // { subT: "Billing", route: "/dashboard/account/billing" },
-        { subT: "User Profile", route: "/dashboard/account/profile" },
-        { subT: "Security", route: "/dashboard/account/security" },
-        // { subT: "Time Zone", route: "/dashboard/account/timezone" },
-      ],
-    },
-  ];
-  
+  {
+    title: "Dashboard",
+    icon: "/dashboard.svg",
+    activeicon: "/activedashboard.svg",
+    route: "/dashboard/activity",
+  },
+
+  {
+    title: "Configuration",
+    icon: "/activity.svg",
+    activeicon: "/activeactivity.svg",
+    route: "/dashboard",
+  },
+  {
+    title: "Blocked Request list",
+    icon: "/blocked.svg",
+    activeicon: "/activeblocked.svg",
+    route: "/dashboard/blocked",
+  },
+  {
+    title: "Settings",
+    icon: "/settings.svg",
+    activeicon: "/activesettings.svg",
+    links: [
+      { subT: "Categories and Filters", route: "/dashboard/settings/cf" },
+      { subT: "Custom Domains", route: "/dashboard/settings/domain" },
+      // { subT: "Blocked pages/URLs", route: "/dashboard/settings/blocked" },
+    ],
+  },
+  {
+    title: "Account",
+    icon: "/users.svg",
+    activeicon: "/users.svg",
+    links: [
+      // { subT: "Billing", route: "/dashboard/account/billing" },
+      { subT: "User Profile", route: "/dashboard/account/profile" },
+      { subT: "Security", route: "/dashboard/account/security" },
+      // { subT: "Time Zone", route: "/dashboard/account/timezone" },
+    ],
+  },
+];

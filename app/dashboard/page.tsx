@@ -18,7 +18,7 @@ const Dashboard = () => {
   // } else {
     return (
       <main className="w-full h-full flex flex-col space-y-4">
-        <h1 className="text-[#181818] text-lg">Dashboard</h1>
+        <h1 className="text-[#181818] text-lg">Configurations</h1>
         <div className="py-10 w-full flex flex-col space-y-4 px-4 bg-[#031E14] rounded-lg">
           <h2 className="text-white text-sm">
             {` We're thrilled to have you onboard!`}👋
