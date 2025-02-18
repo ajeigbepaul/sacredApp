@@ -60,6 +60,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <Providers session={session}>
+        
         <body
           className={`${secondaryFont.variable} ${geistSans.variable} ${geistMono.variable} ${sfProM.variable} ${sfProB.variable} antialiased`}
         >

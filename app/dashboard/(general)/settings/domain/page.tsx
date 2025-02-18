@@ -21,10 +21,16 @@ const CustomDomain = () => {
   });
   console.log(data, "Domain data");
   const [blocked, setBlocked] = useState("");
+  const [allowed,setAllowed] = useState("");
   const [selectedDomain, setSelectedDomain] = useState(""); // New state for selected domain
   // const [domains, setDomains] = useState<any[]>(data?.data || []); // State for domains
+  const [selectedAllowedDomain, setSelectedAllowedDomain] = useState("");
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedDomain(e.target.value); // Update selected domain
+    console.log(e.target.value); // Log the selected domain
+  };
+  const handleAllowedChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedAllowedDomain(e.target.value); // Update selected domain
     console.log(e.target.value); // Log the selected domain
   };
   // const handleDelete = () => {
@@ -68,8 +74,9 @@ const CustomDomain = () => {
   return (
     <div className="w-full flex flex-col space-y-4">
       <h1 className="text-[#181818] text-2xl font-sfprodb">Custom Domains</h1>
-      <div className="grid grid-cols-1 gap-4">
-        {/* <div className="bg-white rounded-lg py-6 w-full flex flex-col space-y-4 p-4">
+      <div className="grid grid-cols-2 gap-4">
+        {/* ALLOWED */}
+        <div className="bg-white rounded-lg py-6 w-full flex flex-col space-y-4 p-4">
           <div className="flex items-start space-x-2">
             <Image
               src={"/custom.svg"}
@@ -79,7 +86,7 @@ const CustomDomain = () => {
             />
             <div>
               <h2 className="font-sfprodm text-lg text-[#181818]">
-                Top Blocked Domains
+                Top Allowed Domains
               </h2>
               <h2 className="text-sm font-sfprodm text-[#828890]">
                 Here you can allow a domain{" "}
@@ -94,11 +101,11 @@ const CustomDomain = () => {
               http://
             </button>
             <input
-              value={allow}
+              value={allowed}
               className="p-3 w-full bg-white"
               name="allow"
               placeholder="domain.com"
-              onChange={(e) => setAllow(e.target.value)}
+              onChange={(e) => setAllowed(e.target.value)}
             />
           </div>
           <button className="px-4 w-fit rounded-lg p-2 text-white bg-[#007C4D]">
@@ -112,19 +119,25 @@ const CustomDomain = () => {
               View all
             </Link>
           </div>
+          {/* Change this to that of allowed domain */}
           <div className="grid grid-cols-2 gap-4">
-            {domains.map((domain) => (
-              <label key={domain} className="flex items-center space-x-2">
-                <input
-                  type="radio"
-                  value={domain}
-                  checked={selectedDomain === domain}
-                  onChange={handleChange} // Handle change for radio buttons
-                  className="mr-2"
-                />
-                {domain}
-              </label>
-            ))}
+            {data?.data.length > 0
+              ? data?.data?.map((domain: any) => (
+                  <label
+                    key={domain?._id}
+                    className="flex items-center space-x-2"
+                  >
+                    <input
+                      type="radio"
+                      value={domain?._id}
+                      checked={selectedAllowedDomain === domain?._id}
+                      onChange={handleAllowedChange} // Handle change for radio buttons
+                      className="mr-2"
+                    />
+                    {domain?.domain}
+                  </label>
+                ))
+              : "No Data available"}
           </div>
           <button
             onClick={handleDelete}
@@ -133,7 +146,8 @@ const CustomDomain = () => {
           >
             Delete Selected Domain
           </button>
-        </div> */}
+        </div>
+        {/* Blocked */}
         <div className="bg-white rounded-lg py-6 w-full flex flex-col space-y-4 p-4">
           <div className="flex items-start space-x-2">
             <Image

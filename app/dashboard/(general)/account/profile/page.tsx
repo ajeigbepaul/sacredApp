@@ -1,8 +1,20 @@
 "use client";
+import { signOut } from "next-auth/react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { FaCamera } from "react-icons/fa6";
 
 const Profile = () => {
+  const router = useRouter();
+  const handleLogout = async () => {
+    try {
+      await signOut({ redirect: false });
+      router.push("/");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -15,29 +27,22 @@ const Profile = () => {
           User management and basic information
         </h6>
       </div>
-      <div className="w-full flex items-center space-x-2">
-        <div className="w-20 h-20 rounded-full">
-          <Image
-            src={"/profileimg.svg"}
-            width={100}
-            height={100}
-            alt="profileicon"
-            className="object-contain"
-          />
+      <form>
+        <div className="w-full flex items-center space-x-2">
+          <div className="w-20 h-20 rounded-full relative overflow-hidden">
+            <input
+              type="file"
+              name="image"
+              accept="image/*"
+              required
+              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+            />
+            <span className="flex items-center justify-center w-full h-full bg-gray-200 rounded-full">
+              <FaCamera />
+            </span>
+          </div>
         </div>
-        <button
-          className={`px-4 w-fit rounded-lg p-2 text-xs font-sfprodm bg-[#007C4D] text-white`}
-        >
-          Upload now
-        </button>
-        <button
-          className={`px-4 w-fit rounded-lg p-2 text-xs font-sfprodm bg-white border border-[#BACCDF] text-[#181818]`}
-        >
-          Cancel
-        </button>
-      </div>
-      <div>
-        <form>
+        <div>
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="text-sm text-[#1D1D1DCC] font-sfprodm">
@@ -47,7 +52,7 @@ const Profile = () => {
                 <input
                   value={firstName}
                   className="p-3 w-full bg-white border rounded-lg border-[#D9D9D9]"
-                  name="allow"
+                  name="firstname"
                   placeholder="Lucas"
                   onChange={(e) => setFirstName(e.target.value)}
                 />
@@ -61,7 +66,7 @@ const Profile = () => {
                 <input
                   value={lastName}
                   className="p-3 w-full bg-white border rounded-lg border-[#D9D9D9]"
-                  name="allow"
+                  name="lastname"
                   placeholder="Peters"
                   onChange={(e) => setLastName(e.target.value)}
                 />
@@ -83,7 +88,7 @@ const Profile = () => {
                 <input
                   value={userName}
                   className="p-3 w-full bg-white "
-                  name="allow"
+                  name="username"
                   placeholder="Lucaspeter"
                   onChange={(e) => setUserName(e.target.value)}
                 />
@@ -104,8 +109,20 @@ const Profile = () => {
               </div>
             </div>
           </div>
-        </form>
-      </div>
+        </div>
+        <div className="w-full ">
+          <button
+            className={`px-4 w-fit rounded-lg p-2 text-xs font-sfprodm bg-[#007C4D] text-white`}
+          >
+            Upload now
+          </button>
+          {/* <button
+            className={`px-4 w-fit rounded-lg p-2 text-xs font-sfprodm bg-white border border-[#BACCDF] text-[#181818]`}
+          >
+            Cancel
+          </button> */}
+        </div>
+      </form>
       <div className="w-full my-8 h-[2px] bg-[#D9D9D9]" />
       <div className="w-full flex items-center justify-between">
         <div className="flex flex-col space-y-1">
@@ -115,6 +132,7 @@ const Profile = () => {
           </h6>
         </div>
         <button
+          onClick={handleLogout}
           className={`px-4 w-fit rounded-lg p-2 text-xs font-sfprodm bg-[#FF00000D] text-[#FF1F00]`}
         >
           Logout

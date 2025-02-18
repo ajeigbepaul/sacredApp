@@ -58,7 +58,7 @@ const LeftNav = () => {
     <div className="w-full h-full">
       <div className="flex flex-col space-y-8 h-auto">
         <div className="w-full p-8">
-          <Image src={"/logo.svg"} alt="sacred-logo" width={125} height={100} className="object-contain" />
+          <Image src={"/ceelaLogo.svg"} alt="sacred-logo" width={200} height={100} className="object-contain" />
         </div>
         {/* Render Nav Links without Sublinks */}
         <div className="w-full flex flex-col space-y-3">

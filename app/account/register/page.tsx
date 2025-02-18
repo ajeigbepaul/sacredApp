@@ -1,13 +1,14 @@
 "use client";
 import Inputs from "@/components/Inputs";
 import Spinner from "@/components/Spinner";
+import { FormContext } from "@/contextapi/FormContext";
 import { Otp } from "@/services/api/auth";
 import { apiService } from "@/services/apiServices";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useContext } from "react";
 import { toast } from "sonner";
 
 const SignUp = () => {
@@ -38,6 +39,9 @@ const SignUp = () => {
     refetchOnMount: true,
     retry: 3,
   });
+
+  // Define the props for the MultiStepForm component
+
   const { mutateAsync, isPending } = useMutation({
     mutationFn: Otp,
     onSuccess: () => {
@@ -52,6 +56,7 @@ const SignUp = () => {
       });
     },
   });
+
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -62,7 +67,12 @@ const SignUp = () => {
     state: "",
     userRole: "",
   });
+  const [currentStep, setCurrentStep] = useState(1); // New state to track the current step
+  const handleNextStep = () => {
+    setCurrentStep((prevStep) => prevStep + 1); // Move to the next step
+  };
   const [selC, setSelC] = useState(null);
+
   const [states, setStates] = useState<string[]>([]); // State to hold the states based on selected country
   const [isLoading, setIsLoading] = useState(true);
   const handleImageLoad = () => {
@@ -103,7 +113,7 @@ const SignUp = () => {
     },
     [d] // Dependency array
   );
-  
+
   // const validateFormData = (data: any) => {
   //   const {
   //     full_name,
@@ -130,7 +140,6 @@ const SignUp = () => {
   // };
 
   const handleNext = useCallback(
-    
     async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       const submitForm = {
@@ -207,132 +216,166 @@ const SignUp = () => {
               {/* Sign-In Form */}
               <form
                 className="w-full flex flex-col lg:space-y-[40px] space-y-12 mt-0"
-                onSubmit={handleNext}
+                onSubmit={
+                  currentStep === 2
+                    ? handleNext
+                    : (e) => {
+                        e.preventDefault();
+                        handleNextStep();
+                      }
+                } // Handle next step or submit
               >
-                <div className="w-full flex flex-col space-y-8">
-                  {/* New Full Name Input */}
-                  <Inputs
-                    name="fullName"
-                    type="text"
-                    label="Full Name"
-                    placeholderText="Enter your full name"
-                    value={formData.fullName}
-                    handleChange={handleInputChange}
-                    styleClass="p-2 md:p-2 placeholder:text-[16px] rounded-lg w-full bg-[#F8FAFF]"
-                  />
-
-                  {/* Email Input */}
-                  <Inputs
-                    name="email"
-                    type="email"
-                    label="Email Address"
-                    placeholderText="Enter your email"
-                    value={formData.email}
-                    handleChange={handleInputChange}
-                    styleClass="p-2 md:p-2 placeholder:text-[16px] rounded-lg w-full bg-[#F8FAFF]"
-                  />
-                </div>
-                {/* Phone number */}
-                <Inputs
-                  name="phonenos"
-                  type="text"
-                  label="Phone number"
-                  placeholderText="Enter your Phone number"
-                  value={formData.phonenos}
-                  handleChange={handleInputChange}
-                  styleClass="p-2 md:p-2 placeholder:text-[16px] rounded-lg w-full bg-[#F8FAFF]"
-                />
-                {/* Country Dropdown */}
-                <div className="w-full">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Country
-                  </label>
-                  <select
-                    name="country"
-                    value={formData.country}
-                    onChange={handleInputChange}
-                    className="p-2 md:p-2 placeholder:text-[16px] rounded-lg w-full bg-[#F8FAFF]"
-                  >
-                    <option value="">Select Country</option>
-                    {d?.data?.map((country: any) => (
-                      <option key={country?._id} value={country?._id}>
-                        {country?.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                {/* State Dropdown */}
-                <div className="w-full">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    State
-                  </label>
-                  <select
-                    name="state"
-                    value={formData.state}
-                    onChange={handleInputChange}
-                    className="p-2 md:p-2 placeholder:text-[16px] rounded-lg w-full bg-[#F8FAFF]"
-                  >
-                    <option value="">Select State</option>
-                    {states?.map((state: any) => (
-                      <option key={state?._id} value={state?.name}>
-                        {state?.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                {/* User Role Dropdown */}
-                <div className="w-full">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    User Role
-                  </label>
-                  <select
-                    name="userRole"
-                    value={formData.userRole}
-                    onChange={handleInputChange}
-                    className="p-2 md:p-2 placeholder:text-[16px] rounded-lg w-full bg-[#F8FAFF]"
-                  >
-                    <option value="">Select User Role</option>
-                    {roles?.data?.map((role: any) => (
-                      <option key={role?._id} value={role?._id}>
-                        {role?.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                {/* Password Inputs */}
-                <Inputs
-                  name="password"
-                  type="password"
-                  label="Password"
-                  placeholderText="Create a password"
-                  value={formData.password}
-                  handleChange={handleInputChange}
-                  styleClass="p-2 md:p-2 placeholder:text-[16px] rounded-lg w-full bg-[#F8FAFF]"
-                />
-                <Inputs
-                  name="confirmPassword"
-                  type="password"
-                  label="Confirm Password"
-                  placeholderText="Rewrite password"
-                  value={formData.confirmPassword}
-                  handleChange={handleInputChange}
-                  styleClass="p-2 md:p-2 placeholder:text-[16px] rounded-lg w-full bg-[#F8FAFF]"
-                />
-
-                <button
-                  type="submit"
-                  className="w-full p-4 text-white bg-[#007C4D] rounded-lg flex items-center justify-center text-[16px]"
-                >
-                  {isPending ? (
-                    <div className="w-full h-full flex items-center justify-center">
-                      <Spinner size="md" />
+                {currentStep === 1 && (
+                  <>
+                    {/* First Part of the Form */}
+                    <Inputs
+                      name="fullName"
+                      type="text"
+                      label="Full Name"
+                      placeholderText="Enter your full name"
+                      value={formData.fullName}
+                      handleChange={handleInputChange}
+                      styleClass="p-2 md:p-2 placeholder:text-[16px] rounded-lg w-full bg-[#F8FAFF]"
+                    />
+                    <Inputs
+                      name="email"
+                      type="email"
+                      label="Email Address"
+                      placeholderText="Enter your email"
+                      value={formData.email}
+                      handleChange={handleInputChange}
+                      styleClass="p-2 md:p-2 placeholder:text-[16px] rounded-lg w-full bg-[#F8FAFF]"
+                    />
+                    <Inputs
+                      name="phonenos"
+                      type="text"
+                      label="Phone number"
+                      placeholderText="Enter your Phone number"
+                      value={formData.phonenos}
+                      handleChange={handleInputChange}
+                      styleClass="p-2 md:p-2 placeholder:text-[16px] rounded-lg w-full bg-[#F8FAFF]"
+                    />
+                    <button
+                      type="button"
+                      onClick={handleNextStep}
+                      className="w-full p-4 text-white bg-[#007C4D] rounded-lg flex items-center justify-center text-[16px]"
+                    >
+                      Next
+                    </button>
+                  </>
+                )}
+                {currentStep === 2 && (
+                  <>
+                    {/* Second Part of the Form */}
+                    <div className="w-full">
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Country
+                      </label>
+                      <select
+                        name="country"
+                        value={formData.country}
+                        onChange={handleInputChange}
+                        className="p-2 md:p-2 placeholder:text-[16px] rounded-lg w-full bg-[#F8FAFF]"
+                      >
+                        <option value="">Select Country</option>
+                        {d?.data?.map((country: any) => (
+                          <option key={country?._id} value={country?._id}>
+                            {country?.name}
+                          </option>
+                        ))}
+                      </select>
                     </div>
-                  ) : (
-                    "Sign up"
-                  )}
-                </button>
+                    {/* State Dropdown */}
+                    <div className="w-full">
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        State
+                      </label>
+                      <select
+                        name="state"
+                        value={formData.state}
+                        onChange={handleInputChange}
+                        className="p-2 md:p-2 placeholder:text-[16px] rounded-lg w-full bg-[#F8FAFF]"
+                      >
+                        <option value="">Select State</option>
+                        {states?.map((state: any) => (
+                          <option key={state?._id} value={state?.name}>
+                            {state?.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    {/* User Role Dropdown */}
+                    <div className="w-full">
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        User Role
+                      </label>
+                      <select
+                        name="userRole"
+                        value={formData.userRole}
+                        onChange={handleInputChange}
+                        className="p-2 md:p-2 placeholder:text-[16px] rounded-lg w-full bg-[#F8FAFF]"
+                      >
+                        <option value="">Select User Role</option>
+                        {roles?.data?.map((role: any) => (
+                          <option key={role?._id} value={role?._id}>
+                            {role?.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    {/* Password Inputs */}
+                    <Inputs
+                      name="password"
+                      type="password"
+                      label="Password"
+                      placeholderText="Create a password"
+                      value={formData.password}
+                      handleChange={handleInputChange}
+                      styleClass="p-2 md:p-2 placeholder:text-[16px] rounded-lg w-full bg-[#F8FAFF]"
+                    />
+                    <Inputs
+                      name="confirmPassword"
+                      type="password"
+                      label="Confirm Password"
+                      placeholderText="Rewrite password"
+                      value={formData.confirmPassword}
+                      handleChange={handleInputChange}
+                      styleClass="p-2 md:p-2 placeholder:text-[16px] rounded-lg w-full bg-[#F8FAFF]"
+                    />
+                    <div className="flex justify-between">
+                    <button
+                      type="button"
+                      onClick={() => setCurrentStep(1)} // Go back to the first step
+                      className="w-full p-4 text-[#007C4D] border-2 border-[#007C4D] rounded-lg flex items-center justify-center text-[16px] mr-2"
+                    >
+                      Back
+                    </button>
+                    <button
+                      type="submit"
+                      className="w-full p-4 text-white bg-[#007C4D] rounded-lg flex items-center justify-center text-[16px]"
+                    >
+                      {isPending ? (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <Spinner size="md" />
+                        </div>
+                      ) : (
+                        "Sign up"
+                      )}
+                    </button>
+                  </div>
+                  </>
+                )}
               </form>
-
+              {/* Progress Bar */}
+              <div className="w-full bg-gray-200 rounded-full h-2">
+                <div
+                  className={`h-full rounded-full ${
+                    currentStep === 1
+                      ? "bg-[#007C4D] w-1/2"
+                      : "bg-[#007C4D] w-full"
+                  }`}
+                />
+              </div>
               {/* Sign-Up Link */}
               <div className="w-full flex space-x-2 items-center justify-center">
                 <h2 className="text-[16px] font-sfprodm text-[#1D1D1DCC]">
@@ -353,18 +396,14 @@ const SignUp = () => {
         <div className="w-full min-h-screen col-span-6 items-center justify-center">
           <div className="w-full h-full">
             {/* This could contain an image or other content for larger screens */}
-            {isLoading && (
-              <div className="w-full h-full flex items-center justify-center">
-                <div className="animate-pulse w-full h-full bg-gradient-to-r from-gray-300 to-gray-200 rounded-lg" />
-              </div>
-            )}
             <Image
               src="/welcomback.png"
               width={1000}
               height={1000}
               alt="welcomeback"
               className="object-contain"
-              onLoad={handleImageLoad}
+              loading="lazy"
+              // onLoad={handleImageLoad}
             />
           </div>
         </div>

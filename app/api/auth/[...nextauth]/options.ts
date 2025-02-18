@@ -1,7 +1,7 @@
 import CredentialsProvider from "next-auth/providers/credentials";
 import { NextAuthOptions } from "next-auth";
 import { login } from "@/services/api/auth";
-
+import GoogleProvider from "next-auth/providers/google";
 /**
  * Configuration options for NextAuth.js authentication.
  */
@@ -12,6 +12,18 @@ export const options: NextAuthOptions = {
   },
 
   providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+      allowDangerousEmailAccountLinking: true, //see info: https://next-auth.js.org/configuration/providers/oauth#allowdangerousemailaccountlinking-option
+      authorization: {
+        params: {
+          prompt: "consent",
+          access_type: "offline",
+          response_type: "code",
+        },
+      },
+    }),
     CredentialsProvider({
       type: "credentials",
       credentials: {},
@@ -93,7 +105,7 @@ export const options: NextAuthOptions = {
   },
 
   pages: {
-    signIn: "/auth/login", // Custom sign-in page
+    signIn: "/account", // Custom sign-in page
     signOut: "/", // Custom sign-out page
     error: "/error", // Custom error page
   },

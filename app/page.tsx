@@ -51,6 +51,9 @@ const Welcome = () => {
   //   email: string;
   //   token: string;
   // }
+  const handleSignInWithGoogle = () => {
+    signIn("google", { callbackUrl: "/dashboard" });
+  };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!emailRegex.test(email)) {
@@ -122,7 +125,7 @@ const Welcome = () => {
               </h2>
 
               {/* Google Sign-In Button */}
-              <button className="w-full p-2 md:p-4 border border-[#D8DEE6] rounded-lg flex items-center justify-center space-x-2">
+              <button onClick={handleSignInWithGoogle} className="w-full p-2 md:p-4 border border-[#D8DEE6] rounded-lg flex items-center justify-center space-x-2">
                 <Image
                   src="/google.svg"
                   width={20}

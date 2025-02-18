@@ -29,8 +29,8 @@ export const sublinks = [
   },
 ];
 export const combinedNavLinks = [
-    { title: "Dashboard", icon: "/dashboard.svg", activeicon:"/activedashboard.svg", route: "/dashboard" },
-    { title: "Activity", icon: "/activity.svg", activeicon:"/activeactivity.svg", route: "/dashboard/activity" },
+    { title: "Configuration", icon: "/activity.svg", activeicon:"/activeactivity.svg", route: "/dashboard" },
+    { title: "Dashboard", icon: "/dashboard.svg", activeicon:"/activedashboard.svg", route: "/dashboard/activity" },
     { title: "Blocked Request list", icon: "/blocked.svg", activeicon:"/activeblocked.svg", route: "/dashboard/blocked" },
     {
       title: "Settings",

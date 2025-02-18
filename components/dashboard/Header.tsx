@@ -18,6 +18,7 @@ const Header = () => {
     retry: 3,
   });
   console.log(user, "User Active");
+  console.log(session, "UserSession");
   const handleLogout = async () => {
     try {
       await signOut({ redirect: false });
@@ -43,7 +44,7 @@ const Header = () => {
         />
       </div>
       <div className="w-fit flex items-center space-x-8">
-        <Image src={"/bell.svg"} width={40} height={40} alt="bell" />
+        <Image src={"/bell.svg"} width={40} height={40} alt="bell"/>
         {session &&
           user && ( // Conditional rendering
             <div className="w-fit flex items-center space-x-2 justify-center">
