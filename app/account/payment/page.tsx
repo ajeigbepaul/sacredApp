@@ -21,7 +21,7 @@ const Payment = () => {
           <div className="w-full h-full max-w-sm lg:max-w-md flex flex-col space-y-8">
             <div className="w-32 md:w-40">
               <Image
-                src="/logo2.svg"
+                src="/ceelaLogo.svg"
                 width={200}
                 height={100}
                 alt="logo"
