@@ -1,14 +1,14 @@
 "use client";
 import Inputs from "@/components/Inputs";
 import Spinner from "@/components/Spinner";
-import { FormContext } from "@/contextapi/FormContext";
+// import { FormContext } from "@/contextapi/FormContext";
 import { Otp } from "@/services/api/auth";
 import { apiService } from "@/services/apiServices";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useState, useCallback, useContext } from "react";
+import React, { useState, useCallback } from "react";
 import { toast } from "sonner";
 
 const SignUp = () => {
@@ -74,10 +74,7 @@ const SignUp = () => {
   const [selC, setSelC] = useState(null);
 
   const [states, setStates] = useState<string[]>([]); // State to hold the states based on selected country
-  const [isLoading, setIsLoading] = useState(true);
-  const handleImageLoad = () => {
-    setIsLoading(false); // Set loading to false when the image has loaded
-  };
+ 
   // Generic handler for form input changes
   const handleInputChange = useCallback(
     async (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
